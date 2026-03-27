@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "paths": {
+    "localRoot": ".local",
+    "upstreamCheckout": ".local/upstream/jakal-flow",
+    "workspaceRoot": ".local/workspaces",
+    "logsRoot": ".local/logs",
+    "profilesRoot": "profiles",
+    "fixturesRoot": "fixtures"
+  },
+  "runtime": {
+    "pythonCommand": "python",
+    "venvPath": ".local/venv",
+    "defaultProfile": "default",
+    "shell": "powershell",
+    "logLevel": "INFO"
+  },
+  "prerequisites": {
+    "git": {
+      "command": "git",
+      "required": true
+    },
+    "python": {
+      "command": "python",
+      "minimumVersion": "3.11",
+      "required": true
+    },
+    "codex": {
+      "command": "codex",
+      "required": false
+    }
+  }
+}
