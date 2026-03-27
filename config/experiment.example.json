@@ -2,7 +2,9 @@
   "schemaVersion": 1,
   "paths": {
     "localRoot": ".local",
+    "upstreamRoot": ".local/upstream",
     "upstreamCheckout": ".local/upstream/jakal-flow",
+    "targetsRoot": ".local/targets",
     "workspaceRoot": ".local/workspaces",
     "logsRoot": ".local/logs",
     "profilesRoot": "config/profiles",
@@ -11,9 +13,16 @@
   "runtime": {
     "pythonCommand": "python",
     "venvPath": ".local/venv",
-    "defaultProfile": "sample-local",
+    "defaultProfile": "jakal-flow-local",
     "shell": "powershell",
     "logLevel": "INFO"
+  },
+  "entryScripts": {
+    "checkPrereqs": "scripts/check-prereqs.ps1",
+    "bootstrap": "scripts/bootstrap.ps1",
+    "cleanLocalState": "scripts/clean-local-state.ps1",
+    "materializeTarget": "scripts/materialize-target.ps1",
+    "invokeVerification": "scripts/invoke-verification.ps1"
   },
   "prerequisites": {
     "git": {

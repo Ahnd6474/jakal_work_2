@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "id": "jakal-flow-local",
+  "displayName": "Jakal-flow Local Target",
+  "description": "Track the upstream Jakal-flow checkout under .local/upstream, materialize a mutable local target repository under .local/targets, and verify it in ordered harness phases.",
+  "source": {
+    "kind": "remoteGit",
+    "repositoryUrl": "https://github.com/Ahnd6474/Jakal-flow.git",
+    "defaultBranch": "main",
+    "checkoutPath": ".local/upstream/jakal-flow"
+  },
+  "target": {
+    "kind": "remoteTarget",
+    "repositoryPath": ".local/targets/jakal-flow-local"
+  },
+  "workspace": {
+    "path": ".local/workspaces/jakal-flow-local"
+  },
+  "environment": {
+    "required": [
+      "OPENAI_API_KEY"
+    ],
+    "optional": [
+      "GITHUB_TOKEN"
+    ]
+  },
+  "prerequisites": {
+    "overlays": {
+      "codex": {
+        "required": true
+      }
+    }
+  },
+  "verification": {
+    "phases": [
+      {
+        "id": "check-prereqs",
+        "entryScript": "checkPrereqs",
+        "description": "Validate shared prerequisites before mutating local state."
+      },
+      {
+        "id": "bootstrap-source",
+        "entryScript": "bootstrap",
+        "description": "Refresh the upstream checkout and shared virtual environment."
+      },
+      {
+        "id": "pytest-target",
+        "command": "python",
+        "args": [
+          "-m",
+          "pytest"
+        ],
+        "workingDirectory": ".local/targets/jakal-flow-local",
+        "timeoutSeconds": 120
+      }
+    ]
+  }
+}

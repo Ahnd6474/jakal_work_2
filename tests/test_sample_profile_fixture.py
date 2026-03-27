@@ -7,12 +7,43 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_example_config_points_to_profile_directory_and_default_sample():
+def test_example_config_points_to_profile_directory_and_default_jakal_flow_profile():
     config_path = REPO_ROOT / "config" / "experiment.example.json"
     config = json.loads(config_path.read_text(encoding="utf-8"))
 
     assert config["paths"]["profilesRoot"] == "config/profiles"
-    assert config["runtime"]["defaultProfile"] == "sample-local"
+    assert config["runtime"]["defaultProfile"] == "jakal-flow-local"
+    assert config["entryScripts"]["bootstrap"] == "scripts/bootstrap.ps1"
+    assert config["entryScripts"]["materializeTarget"] == "scripts/materialize-target.ps1"
+
+
+def test_jakal_flow_profile_freezes_remote_target_contract():
+    profile_path = REPO_ROOT / "config" / "profiles" / "jakal-flow-local.json"
+    profile = json.loads(profile_path.read_text(encoding="utf-8"))
+
+    assert profile["schemaVersion"] == 1
+    assert profile["id"] == "jakal-flow-local"
+    assert profile["source"]["kind"] == "remoteGit"
+    assert profile["source"]["repositoryUrl"] == "https://github.com/Ahnd6474/Jakal-flow.git"
+    assert profile["source"]["defaultBranch"] == "main"
+    assert profile["source"]["checkoutPath"] == ".local/upstream/jakal-flow"
+    assert profile["target"]["kind"] == "remoteTarget"
+    assert profile["target"]["repositoryPath"] == ".local/targets/jakal-flow-local"
+    assert profile["workspace"]["path"] == ".local/workspaces/jakal-flow-local"
+    assert profile["environment"]["required"] == ["OPENAI_API_KEY"]
+    assert profile["environment"]["optional"] == ["GITHUB_TOKEN"]
+    assert profile["prerequisites"]["overlays"]["codex"]["required"] is True
+    assert [phase["id"] for phase in profile["verification"]["phases"]] == [
+        "check-prereqs",
+        "bootstrap-source",
+        "pytest-target",
+    ]
+    assert profile["verification"]["phases"][0]["entryScript"] == "checkPrereqs"
+    assert profile["verification"]["phases"][1]["entryScript"] == "bootstrap"
+    assert profile["verification"]["phases"][2]["command"] == "python"
+    assert profile["verification"]["phases"][2]["args"] == ["-m", "pytest"]
+    assert profile["verification"]["phases"][2]["workingDirectory"] == ".local/targets/jakal-flow-local"
+    assert profile["verification"]["phases"][2]["timeoutSeconds"] == 120
 
 
 def test_sample_profile_is_declarative_and_bounded():

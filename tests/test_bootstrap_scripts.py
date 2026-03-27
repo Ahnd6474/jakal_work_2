@@ -55,18 +55,27 @@ def write_config(
         "schemaVersion": 1,
         "paths": {
             "localRoot": str(local_root),
+            "upstreamRoot": str(local_root / "upstream"),
             "upstreamCheckout": str(local_root / "upstream" / "jakal-flow"),
+            "targetsRoot": str(local_root / "targets"),
             "workspaceRoot": str(local_root / "workspaces"),
             "logsRoot": str(local_root / "logs"),
-            "profilesRoot": str(REPO_ROOT / "profiles"),
+            "profilesRoot": str(REPO_ROOT / "config" / "profiles"),
             "fixturesRoot": str(REPO_ROOT / "fixtures"),
         },
         "runtime": {
             "pythonCommand": python_command or PYTHON_EXE,
             "venvPath": str(local_root / "venv"),
-            "defaultProfile": "default",
+            "defaultProfile": "jakal-flow-local",
             "shell": "powershell",
             "logLevel": "INFO",
+        },
+        "entryScripts": {
+            "checkPrereqs": str(REPO_ROOT / "scripts" / "check-prereqs.ps1"),
+            "bootstrap": str(REPO_ROOT / "scripts" / "bootstrap.ps1"),
+            "cleanLocalState": str(REPO_ROOT / "scripts" / "clean-local-state.ps1"),
+            "materializeTarget": str(REPO_ROOT / "scripts" / "materialize-target.ps1"),
+            "invokeVerification": str(REPO_ROOT / "scripts" / "invoke-verification.ps1"),
         },
         "prerequisites": {
             "git": {
