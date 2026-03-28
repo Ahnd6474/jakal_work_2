@@ -228,9 +228,7 @@ export default function App({ repository }) {
               >
                 <span style={shellStyles.label}>{route.label}</span>
                 <span style={shellStyles.caption}>
-                  {route.description}
-                  {" • "}
-                  {count} items
+                  {`${route.description} | ${count} items`}
                 </span>
               </a>
             );
