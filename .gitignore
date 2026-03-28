@@ -1,0 +1,5 @@
+__pycache__/
+.pytest_cache/
+.venv/
+_tmp_jakal_flow_remote/
+desktop/node_modules/
